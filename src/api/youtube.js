@@ -1,13 +1,17 @@
 import axios from "axios";
 
 export default class Youtube {
-  constructor() {
-    this.httpClient = axios.create({
-      baseURL: "https://www.googleapis.com/youtube/v3",
-      params: {
-        key: process.env.REACT_APP_YOUTUBE_API_KEY,
-      },
-    });
+  //   constructor() {
+  //     this.httpClient = axios.create({
+  //       baseURL: "https://www.googleapis.com/youtube/v3",
+  //       params: {
+  //         key: process.env.REACT_APP_YOUTUBE_API_KEY,
+  //       },
+  //     });
+  //   }
+  // 외부로부터 필요한 디펜던시를 주입받는다(DI)
+  constructor(apiClient) {
+    this.apiClient = apiClient;
   }
 
   async search(keyword) {
@@ -17,8 +21,8 @@ export default class Youtube {
 
   async #searchByKeyword(keyword) {
     // fetch의 문제점 - json으로 변환필요, 백엔드쪽에서 404, 400과 같은 에러코드들을 성공으로 간주한다(어쨌든 response가 있었으므로)
-    return this.httpClient
-      .get("search", {
+    return this.apiClient
+      .search({
         params: {
           part: "snippet",
           maxResults: 25,
@@ -32,8 +36,8 @@ export default class Youtube {
 
   async #mostPopular() {
     // fetch의 문제점 - json으로 변환필요, 백엔드쪽에서 404, 400과 같은 에러코드들을 성공으로 간주한다(어쨌든 response가 있었으므로)
-    return this.httpClient
-      .get("videos", {
+    return this.apiClient
+      .videos({
         params: {
           part: "snippet",
           maxResults: 25,
