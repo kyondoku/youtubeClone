@@ -16,7 +16,28 @@ export default class Youtube {
 
   async search(keyword) {
     // 함수앞에 #을 붙이면 private함수(class 외부에서 호출불가)
-    return keyword ? this.#searchByKeyword() : this.#mostPopular();
+    return keyword ? this.#searchByKeyword(keyword) : this.#mostPopular();
+  }
+
+  async channelImageURL(id) {
+    return this.apiClient
+      .channels({ params: { part: "snippet", id } })
+      .then((res) => res.data.items[0].snippet.thumbnails.default.url);
+  }
+
+  async relatedVideos(channelId) {
+    return this.apiClient
+      .search({
+        params: {
+          part: "snippet",
+          maxResults: 25,
+          type: "video",
+          channelId,
+        },
+      })
+      .then((res) =>
+        res.data.items.map((item) => ({ ...item, id: item.id.videoId }))
+      );
   }
 
   async #searchByKeyword(keyword) {
