@@ -1,11 +1,17 @@
 import React from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { formatAgo } from "../util/date";
 
 export default function VideoCard({ video }) {
   const { title, thumbnails, channelTitle, publishedAt } = video.snippet;
+  const navigate = useNavigate();
+
+  function moveToDetail() {
+    navigate(`/videos/watch/${video.id}`, { state: { video: video } });
+  }
 
   return (
-    <li>
+    <li onClick={moveToDetail}>
       <img className="w-full" src={thumbnails.medium.url} alt={title} />
       <div>
         <p className="font-semibold my-2 line-clamp-2">{title}</p>
