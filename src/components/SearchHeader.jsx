@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { BsYoutube, BsSearch } from "react-icons/bs";
 
 export default function SearchHeader() {
   const { keyword } = useParams();
   const [text, setText] = useState("");
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log(e);
-    setText("");
-  };
   useEffect(() => {
     setText(keyword || "");
   }, [keyword]);
